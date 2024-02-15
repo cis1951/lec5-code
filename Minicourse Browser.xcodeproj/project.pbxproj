@@ -13,6 +13,7 @@
 		89ABFB862B7EC66B00CAF78A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89ABFB852B7EC66B00CAF78A /* Preview Assets.xcassets */; };
 		89BAA44C2B7EC9ED0053AA95 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BAA44B2B7EC9ED0053AA95 /* Course.swift */; };
 		89BAA4512B7ECA210053AA95 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BAA4502B7ECA210053AA95 /* MockData.swift */; };
+		89BAA4562B7ECBFA0053AA95 /* CourseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BAA4552B7ECBFA0053AA95 /* CourseDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,8 @@
 		89ABFB852B7EC66B00CAF78A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		89BAA44B2B7EC9ED0053AA95 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		89BAA4502B7ECA210053AA95 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		89BAA4542B7ECB730053AA95 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		89BAA4552B7ECBFA0053AA95 /* CourseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +42,7 @@
 		89ABFB722B7EC66A00CAF78A = {
 			isa = PBXGroup;
 			children = (
+				89BAA4542B7ECB730053AA95 /* README.md */,
 				89ABFB7D2B7EC66A00CAF78A /* Minicourse Browser */,
 				89ABFB7C2B7EC66A00CAF78A /* Products */,
 			);
@@ -77,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				89ABFB802B7EC66A00CAF78A /* RootView.swift */,
+				89BAA4552B7ECBFA0053AA95 /* CourseDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -167,6 +172,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89BAA4562B7ECBFA0053AA95 /* CourseDetailView.swift in Sources */,
 				89BAA44C2B7EC9ED0053AA95 /* Course.swift in Sources */,
 				89ABFB812B7EC66A00CAF78A /* RootView.swift in Sources */,
 				89ABFB7F2B7EC66A00CAF78A /* Minicourse_BrowserApp.swift in Sources */,
