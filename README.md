@@ -95,12 +95,20 @@ First, we'll need to add a `@State` property to keep track of the currently sele
 @State var selectedCourse: Course? = nil
 ```
 
+Next, we'll tell the list to update the `selectedCourse` property when a course is selected:
+```swift
+List(Course.minicourses, selection: $selectedCourse) { course in
+    // ...
+}
+```
+
 Now, let's swap out `NavigationStack` for `NavigationSplitView`. Note that the split view takes an extra parameter, the `detail` parameter, which tells SwiftUI what to show to the right of the sidebar. Let's have `detail` show the current course, or a placeholder if no course is selected:
 ```swift
 NavigationSplitView {
-    List(Course.minicourses) { course in
+    List(Course.minicourses, selection: $selectedCourse) { course in
         CourseRowView(course: course)
     }
+    .navigationTitle("Minicourses")
 } detail: {
     if let selectedCourse {
         CourseDetailView(course: selectedCourse)
@@ -113,6 +121,9 @@ NavigationSplitView {
 }
 ```
 
-You might ask: What's that `detail:` doing there? That's actually a controversial feature called [multiple trailing closure syntax](https://github.com/apple/swift-evolution/blob/main/proposals/0279-multiple-trailing-closures.md). It was subject to some derision when it was initiaally proposed, but it's actually quite useful when dealing with SwiftUI.
+Notice how we got rid of the `.navigationDestination` modifier - that's because we're now telling the split view what to display in the `detail` closure.
+
+> [!NOTE]
+> You might ask: What's that `detail:` doing there? That's actually a controversial feature called [multiple trailing closure syntax](https://github.com/apple/swift-evolution/blob/main/proposals/0279-multiple-trailing-closures.md). It was subject to some derision when it was initiaally proposed, but it's actually quite useful when dealing with SwiftUI.
 
 If you build and run, you'll notice while the app behaves the same way as before on iPhone, it feels a lot more at home on iPad. That's the magic of `NavigationSplitView` - it automatically adapts to whatever device you're using.
