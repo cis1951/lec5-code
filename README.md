@@ -127,3 +127,149 @@ Notice how we got rid of the `.navigationDestination` modifier - that's because 
 > You might ask: What's that `detail:` doing there? That's actually a controversial feature called [multiple trailing closure syntax](https://github.com/apple/swift-evolution/blob/main/proposals/0279-multiple-trailing-closures.md). It was subject to some derision when it was initiaally proposed, but it's actually quite useful when dealing with SwiftUI.
 
 If you build and run, you'll notice while the app behaves the same way as before on iPhone, it feels a lot more at home on iPad. That's the magic of `NavigationSplitView` - it automatically adapts to whatever device you're using.
+
+## Step 5: Favoriting Courses with a View Model
+
+Now, let's implement the ability to favorite courses. To keep code clean, we'll implement the actual logic for this in a *view model* so we can separate it from the view itself. Let's make a new file in the "View Models" folder and call it `CoursesViewModel`.
+
+We'll make a class and fill in its logic:
+```swift
+class CoursesViewModel: ObservableObject {
+    @Published private var favoritedCourseCodes = Set<String>()
+    
+    init(favoritedCourseCodes: Set<String> = []) {
+        self.favoritedCourseCodes = favoritedCourseCodes
+    }
+    
+    func isFavorited(course: Course) -> Bool {
+        return favoritedCourseCodes.contains(course.id)
+    }
+    
+    func favorite(course: Course) {
+        favoritedCourseCodes.insert(course.id)
+    }
+    
+    func unfavorite(course: Course) {
+        favoritedCourseCodes.remove(course.id)
+    }
+    
+    var favoritedCourses: [Course] {
+        Course.minicourses.filter { isFavorited(course: $0) }
+    }
+    
+    var unfavoritedCourses: [Course] {
+        Course.minicourses.filter { !isFavorited(course: $0) }
+    }
+}
+```
+
+You may need to `import SwiftUI` for this to work.
+
+We'll then create an instance of it in the `Minicourse_BrowserApp` struct and pass it down to our views via a `.environmentObject` modifier:
+```swift
+@main
+struct Minicourse_BrowserApp: App {
+    @StateObject var coursesViewModel = CoursesViewModel()
+    
+    var body: some Scene {
+        WindowGroup {
+            RootView()
+                .environmentObject(coursesViewModel)
+        }
+    }
+}
+```
+
+Finally, we'll use this to display separate sections for favorited and unfavorited courses in the list view. First, we'll need to add an `@EnvironmentObject` property to `RootView`, like this:
+```swift
+@EnvironmentObject var coursesViewModel: CoursesViewModel
+```
+
+This will fetch the view model from the `.environmentObject` modifier we added earlier. With this, we can divide the list into two sections, like this:
+```swift
+List(selection: $selectedCourse) {
+    Section("Favorites") {
+        ForEach(coursesViewModel.favoritedCourses) { course in
+            CourseRowView(course: course)
+        }
+    }
+    
+    Section("Others") {
+        ForEach(coursesViewModel.unfavoritedCourses) { course in
+            CourseRowView(course: course)
+        }
+    }
+}
+```
+
+When you build and run the app, you'll notice the app now has two sections!
+
+If your preview is crashing, you might need to add `.environmentObject` to your `#Preview` as well. You won't have access to `Minicourse_BrowserApp`'s view model, so just instantiate a new one:
+```swift
+#Preview {
+    RootView()
+        .environmentObject(CoursesViewModel())
+}
+```
+
+## Step 6: Add a "favorite" button
+View models are fun and all, but our `CoursesViewModel` isn't doing anything useful quite yet. To fix that, we'll add a "Favorite" button to the top bar on the course detail view. We can use the `.toolbar` modifier on `CourseDetailView` to accomplish this:
+```swift
+// ...
+.navigationTitle(course.code)
+.navigationBarTitleDisplayMode(.inline)
+.toolbar {
+    ToolbarItem {
+        if coursesViewModel.isFavorited(course: course) {
+            Button("Favorited", systemImage: "star.fill") {
+                coursesViewModel.unfavorite(course: course)
+            }
+        } else {
+            Button("Add to Favorites", systemImage: "star") {
+                coursesViewModel.favorite(course: course)
+            }
+        }
+    }
+}
+```
+
+Of course, we'll need to have `CourseDetailView` read in `coursesViewModel` before we can actually use it. To do so, we'll add the same `@EnvironmentObject` property to `CourseDetailView`:
+```swift
+@EnvironmentObject var coursesViewModel: CoursesViewModel
+```
+
+Now when we run the app, we can favorite and unfavorite courses!
+
+## Step 7: Add an animation
+To wrap things up, we'll add a fun animation when we navigate to the course detail view. Specifically, we'll make the icon do a 360° spin and scale up when we enter the screen. First, we'll need a few state variables to store the state of the animation. Add these to `CourseDetailView`:
+```swift
+@State var scaleEffect: CGFloat = 0
+@State var rotationEffect: Angle = .zero
+```
+
+Now, apply the `.scaleEffect` and `.rotationEffect` modifiers to the icon:
+```swift
+Image(systemName: course.icon)
+    .resizable()
+    .scaledToFit()
+    .foregroundStyle(.tint)
+    .scaleEffect(scaleEffect)
+    .rotationEffect(rotationEffect)
+    .frame(height: 100)
+```
+
+Finally, we'll use `.onAppear` to trigger the animation when the view appears on screen. We'll update the state variables, and we'll use `withAnimation` to tell SwiftUI to animate our changes:
+```swift
+// ...
+.toolbar {
+    // ...
+}
+.onAppear {
+    withAnimation(.bouncy) {
+        scaleEffect = 1
+        rotationEffect = .degrees(360)
+    }
+}
+```
+
+And we're done! Go ahead and run the app once more - you'll notice our fancy animation whenever you tap on a course.
