@@ -8,9 +8,33 @@
 import SwiftUI
 
 struct RootView: View {
+    @State var selectedCourse: Course? = nil
+    @EnvironmentObject var coursesViewModel: CoursesViewModel
+    
     var body: some View {
-        List(Course.minicourses) { course in
-            CourseRowView(course: course)
+        NavigationSplitView {
+            List(selection: $selectedCourse) {
+                Section("Favorites") {
+                    ForEach(coursesViewModel.favoritedCourses) { course in
+                        CourseRowView(course: course)
+                    }
+                }
+                
+                Section("Others") {
+                    ForEach(coursesViewModel.unfavoritedCourses) { course in
+                        CourseRowView(course: course)
+                    }
+                }
+            }
+            .navigationTitle("Minicourses")
+        } detail: {
+            if let selectedCourse {
+                CourseDetailView(course: selectedCourse)
+            } else {
+                Text("Choose a minicourse on the sidebar.")
+                    .foregroundStyle(.secondary)
+                    .padding()
+            }
         }
     }
 }
@@ -19,10 +43,16 @@ struct CourseRowView: View {
     let course: Course
     
     var body: some View {
-        Label("**\(course.code)**: \(course.name)", systemImage: course.icon)
+        NavigationLink(
+            value: course,
+            label: {
+                Label("**\(course.code)**: \(course.name)", systemImage: course.icon)
+            }
+        )
     }
 }
 
 #Preview {
     RootView()
+        .environmentObject(CoursesViewModel())
 }

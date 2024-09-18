@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct CourseDetailView: View {
+    @EnvironmentObject var coursesViewModel: CoursesViewModel
+    
+    @State var scaleEffect: CGFloat = 0
+    @State var rotationEffect: Angle = .zero
+    
     let course: Course
     
     var body: some View {
@@ -15,6 +20,8 @@ struct CourseDetailView: View {
             Image(systemName: course.icon)
                 .resizable()
                 .scaledToFit()
+                .scaleEffect(scaleEffect)
+                .rotationEffect(rotationEffect)
                 .foregroundStyle(.tint)
                 .frame(height: 100)
             
@@ -27,11 +34,35 @@ struct CourseDetailView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
+        .onAppear {
+            withAnimation(.bouncy(duration: 0.5)) {
+                scaleEffect = 1
+                rotationEffect = .degrees(360)
+            }
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
+        .navigationTitle(course.code)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem {
+                if coursesViewModel.isFavorited(course: course) {
+                    Button("Unfavorite", systemImage: "star.fill") {
+                        coursesViewModel.unfavorite(course: course)
+                    }
+                } else {
+                    Button("Favorite", systemImage: "star") {
+                        coursesViewModel.favorite(course: course)
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    CourseDetailView(course: Course.minicourses[0])
+    NavigationStack {
+        CourseDetailView(course: Course.minicourses[0])
+            .environmentObject(CoursesViewModel())
+    }
 }

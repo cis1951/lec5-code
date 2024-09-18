@@ -14,6 +14,7 @@
 		89BAA44C2B7EC9ED0053AA95 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BAA44B2B7EC9ED0053AA95 /* Course.swift */; };
 		89BAA4512B7ECA210053AA95 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BAA4502B7ECA210053AA95 /* MockData.swift */; };
 		89BAA4562B7ECBFA0053AA95 /* CourseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BAA4552B7ECBFA0053AA95 /* CourseDetailView.swift */; };
+		89BAA45A2B7EE9AF0053AA95 /* CoursesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BAA4592B7EE9AF0053AA95 /* CoursesViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		89BAA4502B7ECA210053AA95 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		89BAA4542B7ECB730053AA95 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		89BAA4552B7ECBFA0053AA95 /* CourseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailView.swift; sourceTree = "<group>"; };
+		89BAA4592B7EE9AF0053AA95 /* CoursesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 		89BAA44E2B7EC9F80053AA95 /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				89BAA4592B7EE9AF0053AA95 /* CoursesViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 				89BAA4562B7ECBFA0053AA95 /* CourseDetailView.swift in Sources */,
 				89BAA44C2B7EC9ED0053AA95 /* Course.swift in Sources */,
 				89ABFB812B7EC66A00CAF78A /* RootView.swift in Sources */,
+				89BAA45A2B7EE9AF0053AA95 /* CoursesViewModel.swift in Sources */,
 				89ABFB7F2B7EC66A00CAF78A /* Minicourse_BrowserApp.swift in Sources */,
 				89BAA4512B7ECA210053AA95 /* MockData.swift in Sources */,
 			);

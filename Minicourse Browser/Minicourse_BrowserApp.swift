@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Minicourse_BrowserApp: App {
+    @StateObject var coursesViewModel = CoursesViewModel()
+    
     var body: some Scene {
         WindowGroup {
             RootView()
+                .environmentObject(coursesViewModel)
         }
     }
 }
