@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CourseDetailView: View {
     @EnvironmentObject var coursesViewModel: CoursesViewModel
+    @EnvironmentObject var navigationManager: NavigationManager
     
     @State var scaleEffect: CGFloat = 0
     @State var rotationEffect: Angle = .zero
@@ -33,6 +34,22 @@ struct CourseDetailView: View {
             Text(course.description)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+            
+            HStack {
+                Button(action: {
+                    navigationManager.path = NavigationPath()
+                }) {
+                    Text("Go Home")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                NavigationLink(
+                    value: Course.minicourses.randomElement()!,
+                    label: {
+                        Text("Random Course")
+                    }
+                )
+            }
         }
         .onAppear {
             withAnimation(.bouncy(duration: 0.5)) {
@@ -64,5 +81,6 @@ struct CourseDetailView: View {
     NavigationStack {
         CourseDetailView(course: Course.minicourses[0])
             .environmentObject(CoursesViewModel())
+            .environmentObject(NavigationManager())
     }
 }

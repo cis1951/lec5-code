@@ -10,10 +10,11 @@ import SwiftUI
 struct RootView: View {
     @State var selectedCourse: Course? = nil
     @EnvironmentObject var coursesViewModel: CoursesViewModel
+    @EnvironmentObject var navigationManager: NavigationManager
     
     var body: some View {
-        NavigationSplitView {
-            List(selection: $selectedCourse) {
+        NavigationStack(path: $navigationManager.path) {
+            List {
                 Section("Favorites") {
                     ForEach(coursesViewModel.favoritedCourses) { course in
                         CourseRowView(course: course)
@@ -27,13 +28,8 @@ struct RootView: View {
                 }
             }
             .navigationTitle("Minicourses")
-        } detail: {
-            if let selectedCourse {
-                CourseDetailView(course: selectedCourse)
-            } else {
-                Text("Choose a minicourse on the sidebar.")
-                    .foregroundStyle(.secondary)
-                    .padding()
+            .navigationDestination(for: Course.self) { course in
+                CourseDetailView(course: course)
             }
         }
     }
@@ -55,4 +51,5 @@ struct CourseRowView: View {
 #Preview {
     RootView()
         .environmentObject(CoursesViewModel())
+        .environmentObject(NavigationManager())
 }
