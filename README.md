@@ -86,6 +86,110 @@ List(Course.minicourses) { course in
 
 With this, `NavigationStack` will know to show `CourseDetailView` when we tap on the link.
 
+## Step 3.5: Implement `NavigationPath`
+
+Now, we're going to add some extra buttons to `CourseDetailView`!
+
+First, let's add a button that takes us to a random course. Start by adding an `HStack` to the bottom of the `VStack` in `CourseDetailView` like so:
+
+```swift
+HStack {
+    NavigationLink(
+        value: Course.minicourses.randomElement()!,
+        label: {
+            Text("Random Course")
+        }
+    )
+}
+```
+
+Now try using this button! If it doesn't work in the preview in `CourseDetailView`, it's because `NavigationLink`s only work when nested inside a `NavigationStack`. However, from the perspective of the preview in `CourseDetailView`, there is no `NavigationStack`. Therefore the `NavigationLink` won't work here (same with `.navigationTitle`!). To fix this, you can just use the preview in `RootView` since this has the `NavigationStack` (or use the simulator). (Or, if you're interested, try to figure out how to get it working in just the preview in `CourseDetailView`!)
+
+You'll see that the views are "pushed" on top of the current one. But how do we get back to the root view? What if we don't want to have to manually pop each view? Well, that's where `NavigationPath` comes in! We can add an extra `path` argument to the `NavigationStack` to keep track of the current path (think of it like a list of the views, but more specifically a list of the values we specified in `navigationDestination`). Then we can programmatically edit this path if we wish.
+
+To add this, first we need somewhere to store this variable. Well, we'll want to access this path from anywhere in the app, so it probably makes the most sense to store this in it's own class, and pass this as an environment object everywhere. Therefore, create a new file called `NavigationManager` with the following class:
+
+```swift
+import SwiftUI
+
+class NavigationManager: ObservableObject {
+    @Published var path = NavigationPath()
+}
+```
+
+Notice this class is an `ObservableObject` because we will be passing it throughout the view hierarchy. Now, in `Minicourse_BrowserApp`, create a new state object for this navigation manager, and pass it in as an environment object:
+
+```swift
+@main
+struct Minicourse_BrowserApp: App {
+    @StateObject var navigationManager = NavigationManager()
+
+    var body: some Scene {
+        WindowGroup {
+            RootView()
+                .environmentObject(navigationManager)
+        }
+    }
+}
+```
+
+We now can access this environment object from any child view. Therefore, in `RootView`, add the environment object:
+
+```swift
+@EnvironmentObject var navigationManager: NavigationManager
+```
+
+Now we can finally add the path variable to our `NavigationStack`:
+
+```swift
+NavigationStack(path: $navigationManager.path) {
+```
+
+Note the `$` because the `NavigationStack` needs to modify the path variable, thus we need to pass in a binding. Now our path is actually tracked no matter where we go.
+
+We'll also we also need to pass in the environment object in the preview of `RootView`:
+
+```swift
+#Preview {
+    RootView()
+        .environmentObject(NavigationManager())
+}
+```
+
+Finally, we're ready to add a button that takes us back to the home view. In `CourseDetailView`, add a button to the `HStack` we made before that says `Go Home`. Now what do we put for the action? Well, it needs to reset the path, so we can set the path in the environment object to a new instance of `NavigationPath` like so:
+
+
+```swift
+HStack {
+    Button(action: {
+        navigationManager.path = NavigationPath()
+    }) {
+        Text("Go Home")
+    }
+    .buttonStyle(.borderedProminent)
+
+    ...
+}
+
+We also need to add the environment object to this view at the top:
+
+```swift
+@EnvironmentObject var navigationManager: NavigationManager
+```
+
+and again add the environment object to the preview:
+
+```swift
+#Preview {
+    CourseDetailView(course: Course.minicourses[0])
+        .environmentObject(NavigationManager())
+}
+```
+
+Now if we try out this button (again with the preview in `RootView` or the simulator), we will see that it takes us back to the home view no matter how many views we've pushed to the front! It is also possible to do more customization with `NavigationPath` (such as removing a couple views from the end), and you can find more details in the [documentation](https://developer.apple.com/documentation/swiftui/navigationpath).
+
+Now you should understand at a basic level how to use `NavigationPath` to reset back to the root view. Before moving on to step 4, comment out or delete all of the code you added for Step 3.5. Step 4 will use a different method of navigation, so we will no longer need the `NavigationPath`.
+
 ## Step 4: Switch to `NavigationSplitView`
 
 If we run our app on the iPad, we might notice it's a bit lacking - there's a bunch of screen real estate that we're simply not using. Many iPad apps take advantage of the extra space by showing a sidebar, which lets users quickly jump between content. Let's implement that for our app with a `NavigationSplitView`.
