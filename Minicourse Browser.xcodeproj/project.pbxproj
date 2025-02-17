@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		893374712D63CE5100989B86 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893374702D63CE4E00989B86 /* FavoritesViewModel.swift */; };
 		89ABFB7F2B7EC66A00CAF78A /* Minicourse_BrowserApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABFB7E2B7EC66A00CAF78A /* Minicourse_BrowserApp.swift */; };
 		89ABFB812B7EC66A00CAF78A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABFB802B7EC66A00CAF78A /* RootView.swift */; };
 		89ABFB832B7EC66B00CAF78A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89ABFB822B7EC66B00CAF78A /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		893374702D63CE4E00989B86 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		89ABFB7B2B7EC66A00CAF78A /* Minicourse Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Minicourse Browser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89ABFB7E2B7EC66A00CAF78A /* Minicourse_BrowserApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Minicourse_BrowserApp.swift; sourceTree = "<group>"; };
 		89ABFB802B7EC66A00CAF78A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 		89BAA44E2B7EC9F80053AA95 /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				893374702D63CE4E00989B86 /* FavoritesViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 				89BAA4562B7ECBFA0053AA95 /* CourseDetailView.swift in Sources */,
 				89BAA44C2B7EC9ED0053AA95 /* Course.swift in Sources */,
 				89ABFB812B7EC66A00CAF78A /* RootView.swift in Sources */,
+				893374712D63CE5100989B86 /* FavoritesViewModel.swift in Sources */,
 				89ABFB7F2B7EC66A00CAF78A /* Minicourse_BrowserApp.swift in Sources */,
 				89BAA4512B7ECA210053AA95 /* MockData.swift in Sources */,
 			);

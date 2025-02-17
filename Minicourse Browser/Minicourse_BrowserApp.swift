@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Minicourse_BrowserApp: App {
+    @State var favoritesViewModel = FavoritesViewModel()
+    
     var body: some Scene {
         WindowGroup {
             RootView()
+                .environment(FavoritesViewModel())
         }
     }
 }
