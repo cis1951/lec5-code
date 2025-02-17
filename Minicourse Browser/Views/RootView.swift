@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct RootView: View {
+    @State var navigationPath = NavigationPath()
+    
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             List(Course.minicourses) { course in
                 CourseRowView(course: course)
             }
             .navigationTitle("Minicourses")
             .navigationDestination(for: Course.self) { course in
                 CourseDetailView(course: course)
+            }
+            .toolbar {
+                ToolbarItem {
+                    Button("Random Course", systemImage: "dice") {
+                        navigationPath.append(Course.minicourses.randomElement()!)
+                    }
+                }
             }
         }
     }

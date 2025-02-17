@@ -80,47 +80,41 @@ List(Course.minicourses) { course in
 
 With this, `NavigationStack` will know to show `CourseDetailView` when we tap on the link.
 
-## Step 4: Switch to `NavigationSplitView`
+## Step 4: Use `NavigationPath`
 
-If we run our app on the iPad, we might notice it's a bit lacking - there's a bunch of screen real estate that we're simply not using. Many iPad apps take advantage of the extra space by showing a sidebar, which lets users quickly jump between content. Let's implement that for our app with a `NavigationSplitView`.
+Navigating based on values doesn't just make our code cleaner - it also lets us control navigation programmatically rather than just relying on `NavigationLink`s. To demonstrate this, let's add a button that takes you to a random course.
 
-First, we'll need to add a `@State` property to keep track of the currently selected course. Go ahead and add this to `RootView`:
+In SwiftUI, navigation stacks can be driven by what's called a `NavigationPath` - think of it like a URL or a path that tells you where you are in an app's hierarchy. All it takes to set one up is to initialize it and store it in a `@State` property:
 ```swift
-@State var selectedCourse: Course? = nil
+@State var navigationPath = NavigationPath()
 ```
 
-Next, we'll tell the list to update the `selectedCourse` property when a course is selected:
+Then, we can tell our `NavigationStack` in `RootView` to use the path:
 ```swift
-List(Course.minicourses, selection: $selectedCourse) { course in
+NavigationStack(path: $navigationPath) {
     // ...
 }
 ```
 
-Now, let's swap out `NavigationStack` for `NavigationSplitView`. Note that the split view takes an extra parameter, the `detail` parameter, which tells SwiftUI what to show to the right of the sidebar. Let's have `detail` show the current course, or a placeholder if no course is selected:
+> **Some food for thought:** Why did we need to pass in a `Binding` with the `$` here?
+
+Now, let's use the `.toolbar` modifier to add a button to the top right of the navigation bar:
 ```swift
-NavigationSplitView {
-    List(Course.minicourses, selection: $selectedCourse) { course in
-        CourseRowView(course: course)
-    }
-    .navigationTitle("Minicourses")
-} detail: {
-    if let selectedCourse {
-        CourseDetailView(course: selectedCourse)
-    } else {
-        Text("Choose a minicourse on the sidebar.")
-            .foregroundStyle(.secondary)
-            .padding()
-            .navigationBarTitleDisplayMode(.inline)
+.toolbar {
+    ToolbarItem {
+        Button("Random Course", systemImage: "dice") {
+            // You'll do this in a bit...
+        }
     }
 }
 ```
 
-Notice how we got rid of the `.navigationDestination` modifier - that's because we're now telling the split view what to display in the `detail` closure.
+And when the button is tapped, we'll append a random course to our `NavigationPath` using the `.append` method:
+```swift
+navigationPath.append(Course.minicourses.randomElement()!)
+```
 
-> [!NOTE]
-> You might ask: What's that `detail:` doing there? That's actually a controversial feature called [multiple trailing closure syntax](https://github.com/apple/swift-evolution/blob/main/proposals/0279-multiple-trailing-closures.md). It was subject to some derision when it was initiaally proposed, but it's actually quite useful when dealing with SwiftUI.
-
-If you build and run, you'll notice while the app behaves the same way as before on iPhone, it feels a lot more at home on iPad. That's the magic of `NavigationSplitView` - it automatically adapts to whatever device you're using.
+Build and run the app, then tap the dice button on the top right - you'll be taken to a random course, all without having used `NavigationLink`!
 
 ## Step 5: Favoriting Courses with a View Model
 
