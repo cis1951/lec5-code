@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct RootView: View {
-    @State var navigationPath = NavigationPath()
-    
     var body: some View {
         List(Course.minicourses) { course in
             CourseRowView(course: course)
