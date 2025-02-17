@@ -98,7 +98,7 @@ NavigationStack(path: $navigationPath) {
 
 > **Some food for thought:** Why did we need to pass in a `Binding` with the `$` here?
 
-Now, let's use the `.toolbar` modifier to add a button to the top right of the navigation bar:
+Now, let's use the `.toolbar` modifier to add a button to the top right of the navigation bar. Note this must be applied *inside* the `NavigationStack` since this is what is managing our navigation. Therefore you can place this modifier at the end of the `List`'s modifiers.
 ```swift
 .toolbar {
     ToolbarItem {
@@ -113,6 +113,8 @@ And when the button is tapped, we'll append a random course to our `NavigationPa
 ```swift
 navigationPath.append(Course.minicourses.randomElement()!)
 ```
+
+> **Understanding check:** Why is it okay to "force unwrap" this optional here with the `!`?
 
 Build and run the app, then tap the dice button on the top right - you'll be taken to a random course, all without having used `NavigationLink`!
 
@@ -162,18 +164,18 @@ struct Minicourse_BrowserApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environment(coursesViewModel)
+                .environment(favoritesViewModel)
         }
     }
 }
 ```
 
-Finally, we'll use this to display separate sections for favorited and unfavorited courses in the list view. First, we'll need to add an `@EnvironmentObject` property to `RootView`, like this:
+Finally, we'll use this to display separate sections for favorited and unfavorited courses in the list view. First, we'll need to add an `@Environment` property to `RootView`, like this:
 ```swift
 @Environment(FavoritesViewModel.self) var favoritesViewModel
 ```
 
-This will fetch the view model from the `.environmentObject` modifier we added earlier. With this, we can divide the list into two sections, like this:
+This will fetch the view model from the `.environment` modifier we added earlier. With this, we can divide the list into two sections, like this:
 ```swift
 List {
     Section("Favorites") {
@@ -224,7 +226,7 @@ View models are fun and all, but our `FavoritesViewModel` isn't doing anything u
 }
 ```
 
-Of course, we'll need to have `CourseDetailView` read in `coursesViewModel` before we can actually use it. To do so, we'll add the same `@EnvironmentObject` property to `CourseDetailView`:
+Of course, we'll need to have `CourseDetailView` read in `coursesViewModel` before we can actually use it. To do so, we'll add the same `@Environment` property to `CourseDetailView`:
 ```swift
 @Environment(FavoritesViewModel.self) var favoritesViewModel
 ```

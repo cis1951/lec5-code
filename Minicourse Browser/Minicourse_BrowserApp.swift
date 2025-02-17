@@ -14,7 +14,7 @@ struct Minicourse_BrowserApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environment(FavoritesViewModel())
+                .environment(favoritesViewModel)
         }
     }
 }
