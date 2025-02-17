@@ -9,11 +9,22 @@ import SwiftUI
 
 struct RootView: View {
     @State var navigationPath = NavigationPath()
+    @Environment(FavoritesViewModel.self) var favoritesViewModel
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            List(Course.minicourses) { course in
-                CourseRowView(course: course)
+            List {
+                Section("Favorites") {
+                    ForEach(favoritesViewModel.favoritedCourses) { course in
+                        CourseRowView(course: course)
+                    }
+                }
+                
+                Section("Others") {
+                    ForEach(favoritesViewModel.unfavoritedCourses) { course in
+                        CourseRowView(course: course)
+                    }
+                }
             }
             .navigationTitle("Minicourses")
             .navigationDestination(for: Course.self) { course in
@@ -41,5 +52,7 @@ struct CourseRowView: View {
 }
 
 #Preview {
+    @Previewable @State var favoritesViewModel = FavoritesViewModel()
     RootView()
+        .environment(favoritesViewModel)
 }
