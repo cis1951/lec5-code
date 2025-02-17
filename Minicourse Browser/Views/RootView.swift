@@ -14,6 +14,9 @@ struct RootView: View {
                 CourseRowView(course: course)
             }
             .navigationTitle("Minicourses")
+            .navigationDestination(for: Course.self) { course in
+                CourseDetailView(course: course)
+            }
         }
     }
 }
@@ -22,9 +25,7 @@ struct CourseRowView: View {
     let course: Course
     
     var body: some View {
-        NavigationLink(destination: {
-            CourseDetailView(course: course)
-        }) {
+        NavigationLink(value: course) {
             Label("**\(course.code)**: \(course.name)", systemImage: course.icon)
         }
     }

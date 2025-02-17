@@ -62,12 +62,9 @@ What we have so far is great, but it can get unwieldy putting the `CourseDetailV
 
 Update the `NavigationLink` in `CourseRowView` to this:
 ```swift
-NavigationLink(
-    value: course,
-    label: {
-        Label("**\(course.code)**: \(course.name)", systemImage: course.icon)
-    }
-)
+NavigationLink(value: course) {
+    Label("**\(course.code)**: \(course.name)", systemImage: course.icon)
+}
 ``` 
 
 Now `CourseRowView` is a lot cleaner, but how will our navigation stack know where to navigate to? To answer that, add a `.navigationDestination` modifier to `RootView`, like this:
